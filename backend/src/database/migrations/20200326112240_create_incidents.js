@@ -1,6 +1,6 @@
 // UP: Criação da tabela
 exports.up = function(knex) {
-    return knex.schema.createTable('incidents'), function (table) {
+    return knex.schema.createTable('incidents', function (table) {
         // ID incremental
         table.increments('id');
 
@@ -14,7 +14,7 @@ exports.up = function(knex) {
 
         // Chave estrangeira
         table.foreign('ong_id').references('id').inTable('ongs');
-    }
+    });
   };
   
   // Down: Se der problema e precisar voltar atrás (Destruição da tabela)
