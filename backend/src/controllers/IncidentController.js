@@ -6,7 +6,32 @@ const connection = require('../database/connection');
 module.exports = {
     // Método List Incidents
     async index(request, response) {
-        const incidents = await connection('incidents').select('*');
+        // Buscar, de dentro do dos querys params, os parâmetro page, se não existir, trazer 1, como padrão
+        const { page = 1 } = request.query;
+        
+        // Repassar o total de registros da base de dados para o frontend. Trazer a primeira posição da array (usando o []).
+        const [count] = await connection('incidents')
+            .count();
+        
+        // Devolver o objeto [count] no cabeçalho da requisição com o título de "X-Total-Count"
+        response.header('X-Total-Count', count['count(*)'])
+        
+        const incidents = await connection('incidents')
+            // Join com a tabela de ONGs: trazer dados da tabela de ONGs, apenas os dados em que o ID da tabela de ONGs seja IGUAL ao campo ONG_ID
+            .join('ongs', 'ongs.id', '=','incidents.ong_id')
+            // Limitar a busca para somente 5 registros/incidents
+            .limit(5)
+            // Pular 5 registros por página, a partir da page 2
+            .offset((page - 1) * 5)
+            // Selecionar todas as colunas de incidents e algumas colunas da ONG
+            .select([
+                'incidents.*',
+                'ongs.name',
+                'ongs.email',
+                'ongs.whatsapp',
+                'ongs.city',
+                'ongs.uf'
+            ]);
 
         return response.json(incidents);
     },
