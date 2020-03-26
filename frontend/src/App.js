@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 // Importar Global.css
 import './global.css';
 
-// Importar Components
-import Logon from './pages/Logon';
+// Importar Rotas
+import Routes from './routes';
 
 function App() {
 return (
-      < Logon />
+      < Routes />
   );
 }
 
