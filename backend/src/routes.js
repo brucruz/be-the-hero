@@ -1,38 +1,17 @@
 // Importar pacote ExpressJS
 const express = require('express');
-// Pacote do ExpressJS para gerar chaves de criptografia
-const crypto = require('crypto');
 
-// Importar arquivo connection.js
-const connection = require('./database/connection');
+// Importar Controllers
+const OngController = require('./controllers/OngController');
+
 
 const routes = express.Router();
 
 // Rota Listar ONGS
-routes.get('/ongs', async (request, response) => {
-    const ongs = await connection('ongs').select('*');
-
-    return response.json(ongs);
-});
+routes.get('/ongs', OngController.index);
 
 // Rota Create ONGs
-routes.post('/ongs', async (request, response) => {
-    const { name, email, whatsapp, city, uf } = request.body;
-
-    const id = crypto.randomBytes(4).toString('HEX');
-
-    // inserção de dados na tabela 'ongs'
-    await connection('ongs').insert({
-        id,
-        name,
-        email,
-        whatsapp,
-        city,
-        uf,
-    });
-
-    return response.json({ id });
-});
+routes.post('/ongs', OngController.create);
 
 // Exportar routes
 module.exports = routes;
