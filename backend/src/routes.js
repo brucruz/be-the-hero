@@ -19,6 +19,8 @@ routes.post('/ongs', OngController.create);
 routes.get('/incidents', IncidentController.index);
 // Rota Create Incident
 routes.post('/incidents', IncidentController.create);
+// Rota Delete Incident
+routes.delete('/incidents/:id', IncidentController.delete);
 
 // Exportar routes
 module.exports = routes;
