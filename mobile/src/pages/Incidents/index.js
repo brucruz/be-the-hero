@@ -19,8 +19,8 @@ export default function Incidents() {
     // semelhante ao useHistory, para lembrar da última tela navegada
     const navigation = useNavigation();
 
-    function navigateToDetail() {
-        navigation.navigate('Detail');
+    function navigateToDetail(incident) {
+        navigation.navigate('Detail', { incident });
     }
 
     async function loadIncidents () {
@@ -71,7 +71,7 @@ export default function Incidents() {
                     
                         <TouchableOpacity
                             style={styles.detailsButton}
-                            onPress={navigateToDetail}
+                            onPress={() => navigateToDetail(incident)}
                         >
                             <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
                             <Feather name="arrow-right" size={16} color='#e02041'  />
