@@ -1,5 +1,9 @@
+// Importar Biblioteca de Internacionalização para a aplicação
+import 'intl';
+// Importar a linguagem Português do Brasil
+import 'intl/locale-data/jsonp/pt-BR';
+
 import React from 'react';
-import { Text, View } from 'react-native';
 
 // Importar routes
 import Routes from './src/routes';
