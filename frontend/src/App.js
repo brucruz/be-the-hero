@@ -1,5 +1,5 @@
 // Importar React e useState
-import React, { useState } from 'react';
+import React from 'react';
 
 // Importar Global.css
 import './global.css';
