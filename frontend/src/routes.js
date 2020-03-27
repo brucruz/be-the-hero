@@ -9,7 +9,7 @@ import Register from './pages/Register';
 export default function Routes() {
     return (
         <BrowserRouter>
-            // Garante que as rotas serão executadas uma por vez //
+            {/* Garante que as rotas serão executadas uma por vez */}
             <Switch>
                 <Route exact path="/" component={Logon} />
                 <Route path="/register" component={Register} />
