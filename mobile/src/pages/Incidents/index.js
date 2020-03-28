@@ -13,8 +13,14 @@ import styles from './styles';
 import api from '../../services/api';
 
 export default function Incidents() {
+    // Armazenar estado dos incidents
     const [incidents, setIncidents] = useState([]);
+    // Armazenar estado do número total de incidentes, sendo 0 o padrão
     const [total, setTotal] = useState(0);
+    // Armazenar estado do número da página, sendo 1 a padrão
+    const [page, setPage] = useState(1);
+    // Armazenar estado de loading, para armazenar informação de quando estivermos buscando dados, para não carregarmos mais de 1 página por vez.
+    const [loading, setLoading] = useState(false);
 
     // semelhante ao useHistory, para lembrar da última tela navegada
     const navigation = useNavigation();
@@ -24,10 +30,30 @@ export default function Incidents() {
     }
 
     async function loadIncidents () {
-        const response = await api.get('incidents');
+        // Se loading estiver como true, parar função. Para evitar que se uma requisição estiver sendo feita, outra requisição seja iniciada
+        if (loading) {
+            return;
+        }
 
-        setIncidents(response.data);
+        // Se o total for maior que zero (ou seja, já foi carregada pelo menos a 1a pag) e o número de incidentes seja igual ao total, parar a função.
+        if (total > 0  && incidents.length === total ) {
+            return;
+        }
+
+        // Marcar como início do loading (true)
+        setLoading(true);
+
+        const response = await api.get('incidents', {
+            params: { page }
+        });
+
+        // Anexar os incidents já buscados aos que serão buscados na próxima requisição
+        setIncidents([... incidents, ... response.data]);
         setTotal(response.headers['x-total-count']);
+        // Aumentar o contador de páginas para a próxima requisição
+        setPage(page + 1);
+        // Marcar como fim do loading (false)
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -53,6 +79,10 @@ export default function Incidents() {
                 keyExtractor={incident => String(incident.id)}
                 // Tirar o símbolo de scroll da tela
                 showsVerticalScrollIndicator={false}
+                // Propriedade que aceita uma função que é disparada de forma automática quando um usuário chega ao final de uma lista
+                onEndReached={loadIncidents}
+                // Propriedade que define o quantos % do final da lista o usuário precisa estar para que carregue novos itens, definido de 0 a 1.
+                onEndReachedThreshold={0.2}
                 renderItem={({ item: incident }) => (
                     <View style={styles.incident}>
                         <Text style={styles.incidentProperty}>ONG:</Text>
