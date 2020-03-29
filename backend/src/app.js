@@ -21,5 +21,5 @@ app.use(routes);
 app.use(errors());
 
 
-// Definir porta para requisição local
-app.listen(3333);
+//exportar o app
+module.exports = app;
