@@ -1,11 +1,10 @@
 // Controller que exportar os métodos da ONG
 
+// Importar utils
+const generateUniqueId = require('../utils/generateUniqueId');
+
 // Importar arquivo connection.js
 const connection = require('../database/connection');
-
-// Pacote do ExpressJS para gerar chaves de criptografia
-const crypto = require('crypto');
-
 
 module.exports = {
     // Método Listar ONGs
@@ -19,7 +18,7 @@ module.exports = {
     async create(request, response) {
         const { name, email, whatsapp, city, uf } = request.body;
 
-        const id = crypto.randomBytes(4).toString('HEX');
+        const id = generateUniqueId();
 
         // inserção de dados na tabela 'ongs'
         await connection('ongs').insert({
